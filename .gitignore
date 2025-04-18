@@ -1,0 +1,6 @@
+# Ignore .o files
+*.o
+# Ignore compiled tests
+test_logic
+test_gui
+test_both
