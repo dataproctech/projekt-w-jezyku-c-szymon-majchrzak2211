@@ -2,8 +2,8 @@
 #include "testing.h"
 
 int main(){
-    struct testi test;
-    test.a=3;
-    printf("%d\n", test.a);
+    struct pawn pawns[64];
+    //int board[8][8] = startup(pawns);
+    hello();
     return 0;
 }

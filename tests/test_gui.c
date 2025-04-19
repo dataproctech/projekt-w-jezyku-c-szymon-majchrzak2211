@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "testing.h"
 
-int hello(){
+void hello(){
     printf("Temp\n");
-    return 0;
 }

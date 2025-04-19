@@ -1,4 +1,4 @@
-# To compile tests type in terminal "make <test_logic / test_gui / test_both>", depends on what you want
+# To compile tests type in terminal "make <logic / gui / both>", depends on what you want
 # To compile main game type "make game"
 # To execute compiled thingy, type "./name" in terminal
 # If you use test_both or game, only one should have main() function
@@ -30,20 +30,24 @@ game: $(OBJ)
 TEST_CFLAGS=-I.
 TEST_DEPS = tests/testing.h
 
-test_logic: tests/test_logic.c $(TEST_DEPS)
+logic: tests/test_logic.c $(TEST_DEPS)
 	$(CC) -o $@ tests/test_logic.c
 
-test_gui: tests/test_gui.c $(TEST_DEPS)
+gui: tests/test_gui.c $(TEST_DEPS)
 	$(CC) -o $@ tests/test_gui.c
 
-test_both: tests/test_gui.c tests/test_logic.c $(TEST_DEPS)
+both: tests/test_gui.c tests/test_logic.c $(TEST_DEPS)
 	$(CC) -o $@ $^ $(TEST_CFLAGS)
 
 # Cleaning up files
 .PHONY: clean
+clean:
+	make clean_compiled
+	make clean_test
+	make clean_game
 clean_test:
 	rm -f tests/*.o
 clean_game:
 	rm -f $(OBJECT_DIR)/*.o
 clean_compiled:
-	rm -f test_logic test_gui test_both game
+	rm -f logic gui both game
