@@ -1,7 +1,7 @@
 # To compile tests type in terminal "make <test_logic / test_gui / test_both>", depends on what you want
 # To compile main game type "make game"
 # To execute compiled thingy, type "./name" in terminal
-# If you use test_both, only one should have main() function
+# If you use test_both or game, only one should have main() function
 CC=gcc
 
 # Make for actual game
