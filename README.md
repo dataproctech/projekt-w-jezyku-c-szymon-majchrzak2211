@@ -9,6 +9,33 @@ Szymon Majchrzak gr.9, Filip Żywicki gr.7.
 ## Project Description:
 An interactive, low-level programming project implemented entirely in C, featuring modular architecture, dynamic memory management, robust error handling, and a graphical user interface (GUI). This project complies with the specific academic requirements for a grade of 5.0, including structured and clear coding practices, effective use of pointers, structures, dynamic data structures, and file-based operations.
 
+## Functional Requirements:
+Game Initialization:
+Prompt user with a main menu(New game, load game, quit).
+Initialize an 8x8 board with 4 initial disks in the center.
+
+GUI:
+-Game Window
+-Board grid with coordinates (A–H, 1–8)
+-Disk counters (Black / White)
+-Current player panel
+- Message/status bar (e.g., "Invalid move", "Player 1's turn", "Game Over")
+
+User Input:
+-Mouse interaction
+-Hover effect on valid cells
+-Click to place disk
+-On invalid move, show warning popup or sound.
+
+Game Logic:
+-Same as classic Reversi:
+--Valid move: must flip at least one opponent disk.
+--Alternate turns.
+--Handle pass if no valid move exists.
+--End game when no valid moves for both players or board is full.
+
+
+
 ## Project Timeline:
 - **Start Date:** April 2, 2025  
 - **End Date:** June 15, 2025
