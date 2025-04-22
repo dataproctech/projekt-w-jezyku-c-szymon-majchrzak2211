@@ -11,28 +11,28 @@ An interactive, low-level programming project implemented entirely in C, featuri
 
 ## Functional Requirements:
 Game Initialization:
-Prompt user with a main menu(New game, load game, quit).
-Initialize an 8x8 board with 4 initial disks in the center.
+- Prompt user with a main menu(New game, load game, quit).
+- Initialize an 8x8 board with 4 initial disks in the center.
 
 GUI:
--Game Window
--Board grid with coordinates (A–H, 1–8)
--Disk counters (Black / White)
--Current player panel
+- Game Window
+- Board grid with coordinates (A–H, 1–8)
+- Disk counters (Black / White)
+- Current player panel
 - Message/status bar (e.g., "Invalid move", "Player 1's turn", "Game Over")
 
 User Input:
--Mouse interaction
--Hover effect on valid cells
--Click to place disk
--On invalid move, show warning popup or sound.
+- Mouse interaction
+- Hover effect on valid cells
+- Click to place disk
+- On invalid move, show warning popup or sound.
 
 Game Logic:
--Same as classic Reversi:
---Valid move: must flip at least one opponent disk.
---Alternate turns.
---Handle pass if no valid move exists.
---End game when no valid moves for both players or board is full.
+- Same as classic Reversi:
+- - Valid move: must flip at least one opponent disk.
+- - Alternate turns.
+- - Handle pass if no valid move exists.
+- - End game when no valid moves for both players or board is full.
 
 
 
