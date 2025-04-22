@@ -1,13 +1,40 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/OrSLBIKg)
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=19072565)
 ---
 
-# Project Title: [Title, e.g., "Interactive Checkers in C"]
+# Project Title: [Reversi]
 
-[🇵🇱 Polski](README.pl.md) | 🇬🇧 English
-
-Project description in English goes here.
+Szymon Majchrzak gr.9, Filip Żywicki gr.7. 
 
 ## Project Description:
 An interactive, low-level programming project implemented entirely in C, featuring modular architecture, dynamic memory management, robust error handling, and a graphical user interface (GUI). This project complies with the specific academic requirements for a grade of 5.0, including structured and clear coding practices, effective use of pointers, structures, dynamic data structures, and file-based operations.
+
+## Functional Requirements:
+Game Initialization:
+- Prompt user with a main menu(New game, load game, quit).
+- Initialize an 8x8 board with 4 initial disks in the center.
+
+GUI:
+- Game Window
+- Board grid with coordinates (A–H, 1–8)
+- Disk counters (Black / White)
+- Current player panel
+- Message/status bar (e.g., "Invalid move", "Player 1's turn", "Game Over")
+
+User Input:
+- Mouse interaction
+- Hover effect on valid cells
+- Click to place disk
+- On invalid move, show warning popup or sound.
+
+Game Logic:
+- Same as classic Reversi:
+- - Valid move: must flip at least one opponent disk.
+- - Alternate turns.
+- - Handle pass if no valid move exists.
+- - End game when no valid moves for both players or board is full.
+
+
 
 ## Project Timeline:
 - **Start Date:** April 2, 2025  
