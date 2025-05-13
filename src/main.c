@@ -37,7 +37,12 @@ int main()
         while(apply_move(&board, x, y, player) == false)
         {
             printf("Invalid move. Try again: ");
-            scanf(" %c%d", &col, &y);
+            scanf(" %s", command);
+            col=command[0], y=command[1]-'0'; // Maybe it works
+            if(strcmp(command, "save")==0){
+                save(&board);
+                continue;
+            }
             x = toupper(col) - 'A';
             y -= 1; // Adjust for 0-based index
         }

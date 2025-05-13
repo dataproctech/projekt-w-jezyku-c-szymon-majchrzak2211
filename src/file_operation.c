@@ -34,7 +34,7 @@ int save(Board *board){
         free(save_name);
         return 1;
     }
-    fprintf(savefile, "Placeholder");
+    printf("Placeholder");
 
     free(save_name);
     fclose(savefile);
