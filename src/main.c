@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <string.h>
 #include "../include/game_logic.h"
+#include "../include/file_operation.h"
 
 int main()
 {
@@ -22,8 +24,14 @@ int main()
         }
         int x, y;
         printf("Player %c, enter your move (e.g., A1): ", player);
-        char col;
-        scanf(" %c%d", &col, &y);
+        char col, command[4];
+        scanf(" %s", command);
+        col=command[0], y=command[1]-'0'; // Maybe it works
+        if(strcmp(command, "save")==0){
+            save(&board);
+            player = (player == BLACK) ? WHITE : BLACK;
+            continue;
+        }
         x = toupper(col) - 'A';
         y -= 1; // Adjust for 0-based index
         while(apply_move(&board, x, y, player) == false)

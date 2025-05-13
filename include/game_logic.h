@@ -4,6 +4,7 @@
 #define EMPTY '.'
 #define BLACK 'B'
 #define WHITE 'W'
+#include <stdbool.h>
 
 typedef struct
 {
