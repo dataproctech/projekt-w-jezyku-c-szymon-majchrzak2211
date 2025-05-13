@@ -19,6 +19,8 @@ void initialize_board(Board *board, int size)
     board->board[mid][mid] = WHITE;
     board->board[mid - 1][mid] = BLACK;
     board->board[mid][mid - 1] = BLACK;
+    board->score.black_count=2;
+    board->score.white_count=2;
 }
 
 void count_pieces(Board *board, int *black_count, int *white_count) 
@@ -138,6 +140,11 @@ bool apply_move(Board *board, int x, int y, char player)
     {
         board->board[y][x] = player;
         flipcolor(board, x, y, player);
+        int black_count;
+        int white_count;
+        count_pieces(board, &black_count, &white_count);
+        board->score.black_count = black_count;
+        board->score.white_count = white_count;
         return true;
     }
     return false;

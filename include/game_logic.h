@@ -5,9 +5,16 @@
 #define BLACK 'B'
 #define WHITE 'W'
 
+typedef struct
+{
+    int black_count;
+    int white_count;
+} str_score;
+
 typedef struct 
 {
     int size;
+    str_score score;
     char **board;
 } Board;
 
