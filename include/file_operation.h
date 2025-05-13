@@ -5,7 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-int save(Board *board);
-int check_saves();
+int save(Board *board, char turn);
+int load(Board *board);
+void check_saves();
 char *get_save_name();
+
 #endif

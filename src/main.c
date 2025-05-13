@@ -10,7 +10,7 @@ int main()
 {
     Board board;
     char player = WHITE;
-    int size = 8;
+    int size = 8, tmp;
     initialize_board(&board, size);
     while(is_game_over(&board) == false)
     {
@@ -28,8 +28,18 @@ int main()
         scanf(" %s", command);
         col=command[0], y=command[1]-'0'; // Maybe it works
         if(strcmp(command, "save")==0){
-            save(&board);
+            save(&board, player);
             player = (player == BLACK) ? WHITE : BLACK;
+            continue;
+        }
+        else if(strcmp(command, "load")==0){
+            tmp = load(&board);
+            if(tmp==-1){
+                printf("Error: Couldn't load a save\n");
+            }
+            else{
+                player = (tmp == BLACK) ? WHITE : BLACK;
+            }
             continue;
         }
         x = toupper(col) - 'A';
@@ -40,7 +50,17 @@ int main()
             scanf(" %s", command);
             col=command[0], y=command[1]-'0'; // Maybe it works
             if(strcmp(command, "save")==0){
-                save(&board);
+                save(&board, player);
+                continue;
+            }
+            else if(strcmp(command, "load")==0){
+                tmp = load(&board);
+                if(tmp==-1){
+                    printf("Error: Couldn't load a save\n");
+                }
+                else{
+                    player = tmp;
+                }
                 continue;
             }
             x = toupper(col) - 'A';
