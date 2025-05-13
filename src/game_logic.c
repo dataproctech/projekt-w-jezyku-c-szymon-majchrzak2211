@@ -58,7 +58,7 @@ void free_board(Board *board)
 
 bool is_valid_move(Board *board, int x, int y, char player) 
 {
-    if (x < 0 || x >= board->size || y < 0 || y >= board->size || board->board[x][y] != EMPTY) 
+    if (x < 0 || x >= board->size || y < 0 || y >= board->size || board->board[y][x] != EMPTY) 
         return false;
 
     char opponent = (player == BLACK) ? WHITE : BLACK;
@@ -73,14 +73,20 @@ bool is_valid_move(Board *board, int x, int y, char player)
             bool found_opponent = false;
 
             while (nx >= 0 && nx < board->size && ny >= 0 && ny < board->size) {
-                if (board->board[ny][nx] == opponent) {
+                if (board->board[ny][nx] == opponent) 
+                {
                     found_opponent = true;
-                } else if (board->board[ny][nx] == player) {
-                    if (found_opponent) {
+                } 
+                else if (board->board[ny][nx] == player) 
+                {
+                    if (found_opponent) 
+                    {
                         valid = true;
                     }
                     break;
-                } else {
+                }
+                else 
+                {
                     break;
                 }
                 nx += dx;
@@ -135,4 +141,20 @@ bool apply_move(Board *board, int x, int y, char player)
         return true;
     }
     return false;
+}
+
+bool has_valid_moves(Board *board, char player) 
+{
+    for (int i = 0; i < board->size; i++) 
+        for (int j = 0; j < board->size; j++) 
+            if (is_valid_move(board, i, j, player)) 
+                return true;
+    return false;
+}
+bool is_game_over(Board *board) 
+{
+    int black_count, white_count;
+    count_pieces(board, &black_count, &white_count);
+    return(black_count == 0 || white_count == 0 || (black_count + white_count == board->size * board->size)|| has_valid_moves(board, BLACK) == false && has_valid_moves(board, WHITE) == false);
+   
 }

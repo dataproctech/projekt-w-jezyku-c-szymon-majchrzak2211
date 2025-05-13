@@ -19,5 +19,7 @@ void free_board(Board *board);
 bool is_valid_move(Board *board, int x, int y, char player);
 void flipcolor(Board *board, int x, int y, char player);
 bool apply_move(Board *board, int x, int y, char player);
+bool has_valid_moves(Board *board, char player);
+bool is_game_over(Board *board);
 
 #endif
