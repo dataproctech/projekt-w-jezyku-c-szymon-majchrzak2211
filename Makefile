@@ -7,7 +7,7 @@ CC=gcc
 # Make for actual game
 # Don't know, don't ask and don't touch, unless it doesn't work
 INCLUDE_DIR = include
-CFLAGS = -I$(INCLUDE_DIR)
+CFLAGS = -I$(INCLUDE_DIR) -lallegro -lallegro_primitives -lallegro_font -lallegro_ttf
 OBJECT_DIR = obj
 SOURCE_DIR = src
 
@@ -27,14 +27,14 @@ game: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 # Make for tests
-TEST_CFLAGS=-I.
+TEST_CFLAGS = -lallegro -lallegro_primitives -lallegro_font -lallegro_ttf
 TEST_DEPS = tests/testing.h
 
 logic: tests/test_logic.c $(TEST_DEPS)
-	$(CC) -o $@ tests/test_logic.c
+	$(CC) -o $@ tests/test_logic.c $(TEST_CFLAGS)
 
 gui: tests/test_gui.c $(TEST_DEPS)
-	$(CC) -o $@ tests/test_gui.c
+	$(CC) -o $@ tests/test_gui.c $(TEST_CFLAGS)
 
 both: tests/test_gui.c tests/test_logic.c $(TEST_DEPS)
 	$(CC) -o $@ $^ $(TEST_CFLAGS)

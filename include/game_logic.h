@@ -4,6 +4,7 @@
 #define EMPTY '.'
 #define BLACK 'B'
 #define WHITE 'W'
+#define BOARD_SIZE 8
 #include <stdbool.h>
 
 typedef struct

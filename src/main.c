@@ -5,12 +5,13 @@
 #include <string.h>
 #include "../include/game_logic.h"
 #include "../include/file_operation.h"
+#include "../include/gui.h"
 
-int main()
-{
+void old_terminal_version(){
     Board board;
     char player = WHITE;
-    int size = 8, tmp;
+    const int size = BOARD_SIZE;
+    int tmp;
     initialize_board(&board, size);
     while(is_game_over(&board) == false)
     {
@@ -75,6 +76,41 @@ int main()
     else 
         printf("It's a draw!\n");
     printf("Final Score - Black: %d, White: %d\n",board.score.black_count, board.score.white_count);
+}
+
+int main()
+{
+    if(check_allegro()==-1) return -1;
+    ALLEGRO_DISPLAY *display = al_create_display(SQUARE_SIZE * BOARD_SIZE, SQUARE_SIZE * BOARD_SIZE + SCORE_HEIGHT);
+    if(check_allegro_var(display)==-1) return -1;
+
+    ALLEGRO_EVENT_QUEUE *queueue = al_create_event_queue();
+    al_register_event_source(queueue, al_get_display_event_source(display));
+
+
+    Board board;
+    initialize_board(&board, BOARD_SIZE);
+    char player = WHITE;
+    bool running = true;
+
+    
+    draw_frame(&board);
+
+    while(running){
+        ALLEGRO_EVENT eevee;
+        al_wait_for_event(queueue, &eevee);
+
+        if(eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+            running = false;
+        }
+
+        draw_frame(&board);
+        al_flip_display();
+    }
+    
     free_board(&board);
+    al_destroy_event_queue(queueue);
+    al_destroy_display(display);
+    al_uninstall_system();
     return 0;
 }    
