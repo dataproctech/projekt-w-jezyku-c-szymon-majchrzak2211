@@ -1,6 +1,8 @@
 #include "../include/gui.h"
 
-
+int random_int(int min, int max){
+    return rand() % (max - min + 1) + min;
+}
 
 int check_allegro(){
     if (!al_init()) {
@@ -30,13 +32,21 @@ int check_allegro_var(ALLEGRO_DISPLAY *var){
 void draw_pawn(ALLEGRO_COLOR pawn_color, int col, int row){ // might make an animation later or something
     al_draw_filled_circle((col+0.5)*SQUARE_SIZE, (row+0.5)*SQUARE_SIZE + SCORE_HEIGHT, SQUARE_SIZE/3, pawn_color);
 }
+void draw_moves(ALLEGRO_COLOR available_move_color, int col, int row){ // placeholder for now
+    al_draw_filled_triangle(
+        (col+0.5)*SQUARE_SIZE, (row+0.115)*SQUARE_SIZE+SCORE_HEIGHT,
+        (col+0.833)*SQUARE_SIZE, (row+0.692)*SQUARE_SIZE+SCORE_HEIGHT,
+        (col+0.167)*SQUARE_SIZE, (row+0.692)*SQUARE_SIZE+SCORE_HEIGHT,
+        available_move_color
+        );
+}
 
-int draw_frame(Board *board){
+int draw_frame(Board *board, char player){
     // Clear background
     al_clear_to_color(al_map_rgb(240, 240, 240));
     // Draw score area background
     al_draw_filled_rectangle(0, 0, BOARD_SIZE * SQUARE_SIZE, SCORE_HEIGHT, al_map_rgb(20, 20, 25));
-
+    
     // Set the font
     ALLEGRO_FONT *font = al_load_ttf_font(FONT_LOCATION, 24, 0);
     if (!font) { fprintf(stderr, "Failed to load font\n"); return -1;}
@@ -61,7 +71,7 @@ int draw_frame(Board *board){
             );
             ALLEGRO_COLOR pawn_color;
             bool is_draw_pawn=false;
-            switch(board->board[col][row]){
+            switch(board->board[row][col]){
                 case('B'):
                     pawn_color = al_map_rgb(20, 20, 20);
                     is_draw_pawn=true;
@@ -74,6 +84,9 @@ int draw_frame(Board *board){
             if(is_draw_pawn){
                 draw_pawn(pawn_color, col, row);
             }
+            else if(is_valid_move(board, col, row, player)){
+                draw_moves(al_map_rgb(20, 20, 90), col, row);
+            }
         }
     }
 
@@ -81,3 +94,16 @@ int draw_frame(Board *board){
     al_destroy_font(font);
 }
 
+int make_a_move(Board *board, char *player, int mouse_x1, int mouse_y1, int mouse_x2, int mouse_y2){
+    int row = (mouse_y1 - SCORE_HEIGHT)/SQUARE_SIZE;
+    int col = mouse_x1 / SQUARE_SIZE;
+    int row2 = (mouse_y2 - SCORE_HEIGHT)/SQUARE_SIZE;
+    int col2 = mouse_x2 / SQUARE_SIZE;
+    printf("col: %d row:%d\n", col, row);
+    al_draw_circle(100, 100, 50, al_map_rgb(255,255,255),5);
+    if(row!=row2 || col!=col2) return -1;
+    if(!is_valid_move(board, col, row, *player)) return -2;
+
+    apply_move(board, col, row, *player);
+    *player = (*player == BLACK) ? WHITE : BLACK;
+}

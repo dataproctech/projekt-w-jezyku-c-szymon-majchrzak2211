@@ -80,37 +80,70 @@ void old_terminal_version(){
 
 int main()
 {
+    
     if(check_allegro()==-1) return -1;
-    ALLEGRO_DISPLAY *display = al_create_display(SQUARE_SIZE * BOARD_SIZE, SQUARE_SIZE * BOARD_SIZE + SCORE_HEIGHT);
+    ALLEGRO_DISPLAY *display = al_create_display(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     if(check_allegro_var(display)==-1) return -1;
 
     ALLEGRO_EVENT_QUEUE *queueue = al_create_event_queue();
     al_register_event_source(queueue, al_get_display_event_source(display));
-
+    bool keyboard_install = !al_is_keyboard_installed();
+    if(keyboard_install) al_install_keyboard();
+    al_register_event_source(queueue, al_get_keyboard_event_source());
+    bool mouse_install = !al_is_mouse_installed();
+    if(mouse_install) al_install_mouse();
+    al_register_event_source(queueue, al_get_mouse_event_source());
+    
 
     Board board;
     initialize_board(&board, BOARD_SIZE);
     char player = WHITE;
     bool running = true;
-
+    int x1, y1, x2, y2;
+    int click_stage=0;
     
-    draw_frame(&board);
+    draw_frame(&board, player);
 
     while(running){
         ALLEGRO_EVENT eevee;
+        ALLEGRO_KEYBOARD_STATE keyboard;
         al_wait_for_event(queueue, &eevee);
+        al_get_keyboard_state(&keyboard);
 
-        if(eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+        if(eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE || (eevee.type == ALLEGRO_EVENT_KEY_DOWN && al_key_down(&keyboard, ALLEGRO_KEY_ESCAPE))){
             running = false;
         }
+        else if(eevee.type == ALLEGRO_EVENT_DISPLAY_RESIZE){ // just some fun stuff
+            int x, y;
+            al_get_window_position(display, &x, &y);
+            al_resize_display(display, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+            al_toggle_display_flag(display, ALLEGRO_MAXIMIZED, false);
+            al_set_window_position(display,x+random_int(20, 50), y+random_int(20, 50));
+        }
+        else if(eevee.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
+            printf("Hello\n");
+            x1=eevee.mouse.x;
+            y1=eevee.mouse.y;
+            click_stage=1;
+        }
+        else if(eevee.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && click_stage == 1){
+            printf("There\n");
+            x2=eevee.mouse.x;
+            y2=eevee.mouse.y;
+            make_a_move(&board, &player, x1, y1, x2, y2);
+            click_stage=0;
+        }
+        
 
-        draw_frame(&board);
+        draw_frame(&board, player);
         al_flip_display();
     }
     
     free_board(&board);
     al_destroy_event_queue(queueue);
     al_destroy_display(display);
+    if(keyboard_install) al_uninstall_keyboard();
+    if(mouse_install) al_uninstall_mouse();
     al_uninstall_system();
     return 0;
 }    
