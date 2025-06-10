@@ -1,0 +1,7 @@
+# Ignore .o files
+*.o
+# Ignore compiled tests
+logic
+gui
+both
+game

@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "stdbool.h": "c",
+        "allegro_ttf.h": "c"
+    }
+}
