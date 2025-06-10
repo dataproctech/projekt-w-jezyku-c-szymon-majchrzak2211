@@ -110,6 +110,8 @@ int main()
         if(has_valid_moves(&board, player) == false){
             printf("Player %c has no valid moves. Skipping turn.\n", player);
             player = (player == BLACK) ? WHITE : BLACK;
+            draw_frame(&board, player, slot);
+            al_flip_display();
         }
         al_wait_for_event(queueue, &eevee);
         al_get_keyboard_state(&keyboard);

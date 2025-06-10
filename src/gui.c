@@ -57,6 +57,10 @@ int draw_frame(Board *board, char player, int slot){
     snprintf(score_text_white, sizeof(score_text_white), "Red: %d", board->score.white_count);
     al_draw_text(font, al_map_rgb(255, 255, 255), BOARD_SIZE*SQUARE_SIZE-125, 5, 0, score_text_white);
 
+    // Draw player turn
+    char player_turn_text[32];
+    snprintf(player_turn_text, sizeof(player_turn_text), "P: %s", (player == BLACK) ? "B" : "R");
+    al_draw_text(font, al_map_rgb(255, 255, 255), BOARD_SIZE*SQUARE_SIZE/2, 5, ALLEGRO_ALIGN_CENTER, player_turn_text);
     //Draw Buttons and slots
     al_draw_filled_rectangle(0,BOARD_SIZE * SQUARE_SIZE + SCORE_HEIGHT,
                                 DISPLAY_WIDTH, DISPLAY_HEIGHT, 
