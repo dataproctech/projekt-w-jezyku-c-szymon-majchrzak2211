@@ -6,7 +6,7 @@
 #include "../include/game_logic.h"
 #include "../include/file_operation.h"
 #include "../include/gui.h"
-
+/*
 void old_terminal_version(){
     Board board;
     char player = WHITE;
@@ -76,7 +76,7 @@ void old_terminal_version(){
     else 
         printf("It's a draw!\n");
     printf("Final Score - Black: %d, White: %d\n",board.score.black_count, board.score.white_count);
-}
+}*/
 
 int main()
 {
@@ -101,8 +101,8 @@ int main()
     bool running = true;
     int x1, y1, x2, y2;
     int click_stage=0;
-    
-    draw_frame(&board, player);
+    int slot;
+    draw_frame(&board, player,slot);
 
     while(running){
         ALLEGRO_EVENT eevee;
@@ -128,14 +128,31 @@ int main()
         }
         else if(eevee.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && click_stage == 1){
             printf("There\n");
+            if(is_mouse_over_button_save(eevee.mouse.x, eevee.mouse.y)){
+                printf("Save\n");
+                save(&board, player, slot); 
+                click_stage=0;
+            }
+            else if(is_mouse_over_button_load(eevee.mouse.x, eevee.mouse.y)){
+                printf("Load\n");
+                player=load(&board, slot);
+                click_stage=0;
+            }
+            else if(is_mouse_over_slots(eevee.mouse.x, eevee.mouse.y)){
+                slot = get_slot_from_mouse(eevee.mouse.x, eevee.mouse.y);
+                printf("Slot: %d\n", slot);
+                click_stage=0;
+            }
+            else{
             x2=eevee.mouse.x;
             y2=eevee.mouse.y;
             make_a_move(&board, &player, x1, y1, x2, y2);
             click_stage=0;
+            }
         }
         
 
-        draw_frame(&board, player);
+        draw_frame(&board, player, slot);
         al_flip_display();
     }
     

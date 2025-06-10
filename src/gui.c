@@ -41,7 +41,7 @@ void draw_moves(ALLEGRO_COLOR available_move_color, int col, int row){ // placeh
         );
 }
 
-int draw_frame(Board *board, char player){
+int draw_frame(Board *board, char player, int slot){
     // Clear background
     al_clear_to_color(al_map_rgb(240, 240, 240));
     // Draw score area background
@@ -56,6 +56,76 @@ int draw_frame(Board *board, char player){
     al_draw_text(font, al_map_rgb(255, 255, 255), 10, 5, 0, score_text_black);
     snprintf(score_text_white, sizeof(score_text_white), "Red: %d", board->score.white_count);
     al_draw_text(font, al_map_rgb(255, 255, 255), BOARD_SIZE*SQUARE_SIZE-125, 5, 0, score_text_white);
+
+    //Draw Buttons and slots
+    al_draw_filled_rectangle(0,BOARD_SIZE * SQUARE_SIZE + SCORE_HEIGHT,
+                                DISPLAY_WIDTH, DISPLAY_HEIGHT, 
+                                al_map_rgb(20, 20, 25));
+        
+    al_draw_filled_rectangle(BUTTON_SAVE_X, BUTTON_SAVE_Y,
+                                BUTTON_SAVE_X + BUTTON_SAVE_W, BUTTON_SAVE_Y + BUTTON_SAVE_H,
+                                al_map_rgb(70, 70, 200));                            
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    BUTTON_SAVE_X + BUTTON_SAVE_W / 2,
+                    BUTTON_SAVE_Y,
+                    ALLEGRO_ALIGN_CENTER, "Save");
+
+    al_draw_filled_rectangle(BUTTON_LOAD_X, BUTTON_LOAD_Y,
+                                BUTTON_LOAD_X + BUTTON_LOAD_W, BUTTON_LOAD_Y + BUTTON_LOAD_H,
+                                al_map_rgb(70, 70, 200));
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    BUTTON_LOAD_X + BUTTON_LOAD_W / 2,
+                    BUTTON_LOAD_Y,
+                    ALLEGRO_ALIGN_CENTER, "Load");
+    
+    al_draw_text(font, al_map_rgb(255,255,255),
+                    SLOTS_X+50 + SLOTS_W / 2,
+                    SLOTS_Y - 40,
+                    ALLEGRO_ALIGN_CENTER, "Slots");
+
+    ALLEGRO_COLOR slot_color = (slot == 1) ? SLOT_ACTIVE_COLOR : SLOT_INACTIVE_COLOR;
+    al_draw_filled_rectangle(SLOTS_X, SLOTS_Y,
+                                SLOTS_X + SLOTS_W, SLOTS_Y + SLOTS_H,
+                                slot_color);
+
+    
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    SLOTS_X + SLOTS_W / 2,
+                    SLOTS_Y,
+                    ALLEGRO_ALIGN_CENTER, "1");
+
+    slot_color = (slot == 2) ? SLOT_ACTIVE_COLOR : SLOT_INACTIVE_COLOR;
+    al_draw_filled_rectangle(SLOTS_X+SLOTS_W+10, SLOTS_Y,
+                                SLOTS_X+SLOTS_W+10 + SLOTS_W, SLOTS_Y + SLOTS_H,
+                                slot_color);
+
+    
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    SLOTS_X+SLOTS_W+10 + SLOTS_W / 2,
+                    SLOTS_Y,
+                    ALLEGRO_ALIGN_CENTER, "2");
+    
+    slot_color = (slot == 3) ? SLOT_ACTIVE_COLOR : SLOT_INACTIVE_COLOR;
+     al_draw_filled_rectangle(SLOTS_X, SLOTS_Y+SLOTS_H+10,
+                                SLOTS_X + SLOTS_W, SLOTS_Y+SLOTS_H+10 + SLOTS_H,
+                                slot_color);
+
+    
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    SLOTS_X + SLOTS_W / 2,
+                    SLOTS_Y + SLOTS_H + 10,
+                    ALLEGRO_ALIGN_CENTER, "3");
+
+    slot_color = (slot == 4) ? SLOT_ACTIVE_COLOR : SLOT_INACTIVE_COLOR;
+    al_draw_filled_rectangle(SLOTS_X+SLOTS_W+10, SLOTS_Y+SLOTS_H+10,
+                                SLOTS_X+SLOTS_W+10 + SLOTS_W, SLOTS_Y+SLOTS_H+10 + SLOTS_H,
+                                slot_color);
+
+    
+    al_draw_text(font, al_map_rgb(255, 255, 255),
+                    SLOTS_X+SLOTS_W+10 + SLOTS_W / 2,
+                    SLOTS_Y + SLOTS_H + 10,
+                    ALLEGRO_ALIGN_CENTER, "4");
 
     // Draw the 8x8 board starting below the score
     for (int row = 0; row < BOARD_SIZE; row++) {
@@ -106,4 +176,35 @@ int make_a_move(Board *board, char *player, int mouse_x1, int mouse_y1, int mous
 
     apply_move(board, col, row, *player);
     *player = (*player == BLACK) ? WHITE : BLACK;
+}
+
+bool is_mouse_over_button_save(int mouse_x, int mouse_y) {
+    return mouse_x >= BUTTON_SAVE_X && mouse_x <= BUTTON_SAVE_X + BUTTON_SAVE_W &&
+           mouse_y >= BUTTON_SAVE_Y && mouse_y <= BUTTON_SAVE_Y + BUTTON_SAVE_H;
+}
+
+bool is_mouse_over_button_load(int mouse_x, int mouse_y) {
+    return mouse_x >= BUTTON_LOAD_X && mouse_x <= BUTTON_LOAD_X + BUTTON_LOAD_W &&
+           mouse_y >= BUTTON_LOAD_Y && mouse_y <= BUTTON_LOAD_Y + BUTTON_LOAD_H;
+}
+bool is_mouse_over_slots(int mouse_x, int mouse_y) {
+    return mouse_x >= SLOTS_X && mouse_x <= SLOTS_X + 2 * (SLOTS_W + 10) &&
+           mouse_y >= SLOTS_Y && mouse_y <= SLOTS_Y + 2 * (SLOTS_H + 10);
+}
+
+bool choose_slot(int mouse_x, int mouse_y, int slot) {
+    int slot_x = SLOTS_X + (slot % 2) * (SLOTS_W + 10);
+    int slot_y = SLOTS_Y + (slot / 2) * (SLOTS_H + 10);
+    return mouse_x >= slot_x && mouse_x <= slot_x + SLOTS_W &&
+           mouse_y >= slot_y && mouse_y <= slot_y + SLOTS_H;
+}
+int get_slot_from_mouse(int mouse_x, int mouse_y) {
+    for (int slot = 0; slot < 4; slot++) {
+        if (choose_slot(mouse_x, mouse_y, slot)) {
+            printf("Slot %d clicked\n", slot + 1);
+            // Return the slot number (1-4)
+            return slot+1;
+        }
+    }
+    return -1; // No valid slot clicked
 }

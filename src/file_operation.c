@@ -47,9 +47,24 @@ char *get_save_name(){
     return savefile_name;
 }
 
-int save(Board *board, char turn){
+char *slot_name(int slot){
+    if(slot<1 || slot>4){
+        printf("\nError: Invalid slot number\n");
+        return NULL;
+    }
+    char *savefile_name = malloc(16*sizeof(char));
+    if (!savefile_name) {
+        printf("\nError: Memory allocation failed.\n");
+        return NULL;
+    }
+    strcpy(savefile_name, "saves/save_0.txt");
+    savefile_name[11] = '0' + slot; // Convert int to char
+    return savefile_name;
+}
+
+int save(Board *board, char turn, int slot){
     check_saves();
-    char *save_name = get_save_name();
+    char *save_name = slot_name(slot);
     if(save_name==NULL) { printf("\nError: Invalid save name\n"); return -1;}
     FILE *savefile = fopen(save_name,"wt");
     if(savefile==NULL){
@@ -72,10 +87,10 @@ int save(Board *board, char turn){
     return 0;
 }
 
-int load(Board *board){
+int load(Board *board, int slot){
     check_saves();
     char player;
-    char *save_name = get_save_name();
+    char *save_name = slot_name(slot);
     if(save_name==NULL) { printf("\nError: Invalid save slot\n"); return -1;}
     FILE *savefile = fopen(save_name,"rt");
     if(savefile==NULL){
