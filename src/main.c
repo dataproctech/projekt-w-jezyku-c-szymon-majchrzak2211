@@ -107,10 +107,14 @@ int main()
     while(running){
         ALLEGRO_EVENT eevee;
         ALLEGRO_KEYBOARD_STATE keyboard;
+        if(has_valid_moves(&board, player) == false){
+            printf("Player %c has no valid moves. Skipping turn.\n", player);
+            player = (player == BLACK) ? WHITE : BLACK;
+        }
         al_wait_for_event(queueue, &eevee);
         al_get_keyboard_state(&keyboard);
 
-        if(eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE || (eevee.type == ALLEGRO_EVENT_KEY_DOWN && al_key_down(&keyboard, ALLEGRO_KEY_ESCAPE))){
+        if(eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE || (eevee.type == ALLEGRO_EVENT_KEY_DOWN && al_key_down(&keyboard, ALLEGRO_KEY_ESCAPE))||is_game_over(&board)){
             running = false;
         }
         else if(eevee.type == ALLEGRO_EVENT_DISPLAY_RESIZE){ // just some fun stuff
@@ -151,11 +155,46 @@ int main()
             }
         }
         
-
+        
         draw_frame(&board, player, slot);
         al_flip_display();
     }
     
+    bool done = false;
+    while(!done)
+    {
+        ALLEGRO_FONT *font = al_load_ttf_font(FONT_LOCATION, 24, 0);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_text(font, al_map_rgb(255, 0, 0), 200, 200,
+                     ALLEGRO_ALIGN_CENTER, "game over");
+        if (board.score.black_count > board.score.white_count) {
+            al_draw_text(font, al_map_rgb(255, 255, 255), 200, 250,
+                         ALLEGRO_ALIGN_CENTER, "Black wins!");
+        } else if (board.score.white_count > board.score.black_count) {
+            al_draw_text(font, al_map_rgb(255, 255, 255), 200, 250,
+                         ALLEGRO_ALIGN_CENTER, "Red wins!");
+        } else {
+            al_draw_text(font, al_map_rgb(255, 255, 255), 200, 250,
+                         ALLEGRO_ALIGN_CENTER, "it's a draw!");
+        }
+        char score_text[64];
+        snprintf(score_text, sizeof(score_text), "Black: %d, Red: %d",
+                 board.score.black_count, board.score.white_count);
+        al_draw_text(font, al_map_rgb(255, 255, 255), 200, 280,
+                     ALLEGRO_ALIGN_CENTER, score_text);
+        al_draw_text(font, al_map_rgb(255, 255, 255), 200, 330,
+                     ALLEGRO_ALIGN_CENTER, "Press any key to quit...");
+        al_flip_display();
+
+        ALLEGRO_EVENT eevee;
+        ALLEGRO_KEYBOARD_STATE keyboard;
+        al_wait_for_event(queueue, &eevee);
+
+        if (eevee.type == ALLEGRO_EVENT_DISPLAY_CLOSE ||
+            eevee.type == ALLEGRO_EVENT_KEY_DOWN) {
+            done = true;
+        }
+    }
     free_board(&board);
     al_destroy_event_queue(queueue);
     al_destroy_display(display);
